@@ -1,0 +1,28 @@
+** Installation and launching
+First, clone the project:
+#+begin_src zsh
+git clone https://github.com/tkerm94/hackathon-template && cd hackathon-template
+#+end_src
+Then create python venv and install all dependencies using =poetry=:
+#+begin_src zsh
+cd backend && python -m venv .venv && poetry install
+#+end_src
+You will need to copy the contents of the =.env-example= file to =.env= file, since it is not tracked by =git=:
+#+begin_src zsh
+cd .. && cp .env-example .env
+#+end_src
+Now you need to start the backend and postgres containers using docker.
+You can run them in detached mode:
+#+begin_src zsh
+docker compose up -d
+#+end_src
+Or you can run them with the =--watch= flag, then the backend container code will be synchronized with the repository:
+#+begin_src zsh
+docker compose up --watch
+#+end_src
+Then you will need to apply the migrations using =alembic= in =poetry= shell:
+#+begin_src zsh
+cd backend && poetry shell
+alembic upgrade head
+exit
+#+end_src
