@@ -1,19 +1,32 @@
 import uuid
+from typing import List
 
-from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
 
-class UserBase(SQLModel):
-    email: EmailStr = Field(unique=True, index=True, max_length=255)
-    username: str = Field(unique=True, index=True, min_length=5, max_length=32)
-    name: str | None = Field(default=None, max_length=255)
+
+class Debtor(SQLModel):
+    name: str
+    debt: float
 
 
+class BaseEvent(SQLModel):
+    bill_id: uuid.UUID = Field(primary_key=True, nullable=False)
+    owner_name: str
 
-class User(UserBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    hashed_password: str
+    event_name: str
+
+    debts: List[Debtor, ...] = Field(default_factory=list)
 
 
-    # Shared properties
+class Trip(SQLModel):
+    bill_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    trip_name: str
+    event_ids: List[uuid.UUID] = Field(default_factory=list)
+
+
+class Bills(SQLModel):
+    bill_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    owner_name: str
+    bill_type: str = "event"
+    users: List[uuid.UUID] = Field(default_factory=list)
