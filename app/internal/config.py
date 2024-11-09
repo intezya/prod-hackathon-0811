@@ -1,4 +1,3 @@
-import secrets
 import warnings
 from typing import Literal
 
@@ -17,9 +16,7 @@ class Settings(BaseSettings):
 
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
 
-    JWT_SECRET_KEY: str = secrets.token_urlsafe(32)
-    ACCESS_TOKEN_EXPIRE_TIME: int = 60 * 24 * 7  # 7 days
-    API_V1_STR: str = "/api/v1"
+    API_V1_STR: str = "/api"
     FRONTEND_HOST: str = "localhost"
     FRONTEND_PORT: str = "4000"
 
@@ -54,7 +51,6 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
-        self._check_default_secret("JWT_SECRET_KEY", self.JWT_SECRET_KEY)
         self._check_default_secret("POSTGRES_PASSWORD", self.POSTGRES_PASSWORD)
         return self
 
