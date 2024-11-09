@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.requests.debt import PayDebt, PayDebtRequest
+from app.api.requests.debt import PayDebtRequest
 from app.api.responses.debt import PayDebtResponse
 
 

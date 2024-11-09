@@ -13,6 +13,7 @@ router = APIRouter()
 async def new_event(body: CreateEventRequest) -> CreateEventResponse:...
 
 
+# Headers: user_name
 # TODO: i think need to do like GetEventResponse
 @router.get("", response_model=EventView)
 async def get_event(body: GetEventRequest) -> EventView: ...

@@ -11,4 +11,4 @@ engine = create_async_engine(str(settings.POSTGRES_DATABASE_URI))
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSession(engine) as session:
         yield session
-        yield session.close()
+        await session.close()
