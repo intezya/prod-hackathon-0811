@@ -1,5 +1,5 @@
 import uuid
-from typing import List
+from typing import List, Optional
 
 from pydantic import field_validator
 from sqlmodel import Field, SQLModel
@@ -10,10 +10,14 @@ class Debtor(SQLModel):
     name: str
     value: float
 
+class Owner(SQLModel):
+    name: str
+    description: Optional[str]
+
 
 class Event(SQLModel, table=True):
     id: uuid.UUID = Field(primary_key=True, nullable=False)
-    owner_name: str
+    owner: Owner
     event_name: str
     debts: List[Debtor, ...] = Field(default_factory=list)
 
@@ -29,6 +33,7 @@ class Link(SQLModel, table=True):
     value: str = Field(primary_key=True)
     id: uuid.UUID
     type: str
+    allowed_user_names: List[str] = Field(default_factory=list)
 
     @classmethod
     @field_validator("type")
@@ -36,3 +41,15 @@ class Link(SQLModel, table=True):
         if v not in ["event", "trip"]:
             raise ValueError("type must be 'event' or 'trip'")
         return v
+
+
+class EventView(SQLModel):
+    id: uuid.UUID
+    event_name: str
+    debts: List[Debtor, ...]
+
+
+class TripView(SQLModel):
+    id: uuid.UUID
+    trip_name: str
+    event_ids: List[uuid.UUID]
