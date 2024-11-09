@@ -5,13 +5,13 @@ from sqlmodel import SQLModel
 from app.internal.db.models import Debtor
 
 
-class CreateEvent(SQLModel):
+class CreateEventRequest(SQLModel):
     event_name: str
     owner_name: str
     debts: List[Debtor]
 
 
-class CreateTripEvent(SQLModel):
+class CreateTripEventRequest(SQLModel):
     event_name: str
     owner_name: str
     trip_id: str

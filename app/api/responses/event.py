@@ -1,10 +1,10 @@
 from sqlmodel import SQLModel
 
 
-class CreateEvent(SQLModel):
+class CreateEventResponse(SQLModel):
     event_id: str
     link: str
 
 
-class CreateTripEvent(SQLModel):
+class CreateTripEventResponse(SQLModel):
     event_id: str

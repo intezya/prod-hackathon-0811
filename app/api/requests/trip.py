@@ -1,12 +1,12 @@
 from sqlmodel import SQLModel
 
 
-class CreateTrip(SQLModel):
+class CreateTripRequest(SQLModel):
     name: str
     user_name: str
     user_names: str
 
 
-class DeleteTrip(SQLModel):
+class DeleteTripRequest(SQLModel):
     trip_id: str
     user_name: str

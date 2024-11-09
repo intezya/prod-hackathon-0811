@@ -1,9 +1,9 @@
 from sqlmodel import SQLModel
 
 
-class CreateTrip(SQLModel):
+class CreateTripResponse(SQLModel):
     trip_id: str
     link: str
 
 
-class DeleteTrip(SQLModel): ...
+class DeleteTripResponse(SQLModel): ...
