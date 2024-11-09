@@ -1,9 +1,12 @@
-from app.api.requests.trip import (CreateTripRequest, DeleteTripRequest,
-                                   GetTripRequest)
+from fastapi import APIRouter
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
 from app.internal.db.core import get_db
 from app.internal.db.models import TripView
-from fastapi import APIRouter
+from app.internal.services.trips import get_trip_view
+
 
 router = APIRouter()
 
