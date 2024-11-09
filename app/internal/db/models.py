@@ -2,6 +2,8 @@ import uuid
 from typing import List, Optional
 
 from pydantic import field_validator
+from sqlalchemy import Column, String, UUID
+from sqlalchemy.dialects.postgresql import ARRAY, JSON
 from sqlmodel import Field, SQLModel
 
 
@@ -17,23 +19,28 @@ class Owner(SQLModel):
 
 class Event(SQLModel, table=True):
     id: uuid.UUID = Field(primary_key=True, default_factory=uuid.uuid4)
-    owner: Owner
+    owner_name: str
+    owner_description: Optional[str]
     event_name: str
-    debts: List[Debtor, ...] = Field(default_factory=list)
+    debts: List[Debtor] = Field(default_factory=None, sa_column=Column(ARRAY(JSON)))
     trip_id: uuid.UUID = Field(nullable=True, default=None)
 
 
 class Trip(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     trip_name: str
-    event_ids: List[uuid.UUID] = Field(default_factory=list)
+    event_ids: List[uuid.UUID] = Field(
+        default_factory=None, sa_column=Column(ARRAY(UUID))
+    )
 
 
 class Link(SQLModel, table=True):
     value: str = Field(primary_key=True)
     id: uuid.UUID
     type: str
-    allowed_user_names: List[str] = Field(default_factory=list)
+    allowed_user_names: List[str] = Field(
+        default_factory=None, sa_column=Column(ARRAY(String))
+    )
 
     @classmethod
     @field_validator("type")
@@ -46,7 +53,7 @@ class Link(SQLModel, table=True):
 class EventView(SQLModel):
     id: uuid.UUID
     event_name: str
-    debts: List[Debtor, ...]
+    debts: List[Debtor]
 
 
 class TripView(SQLModel):

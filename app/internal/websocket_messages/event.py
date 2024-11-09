@@ -2,7 +2,7 @@ from app.internal.db.models import TripView
 from app.internal.services.websocket import main_websocket_service as ws_service
 
 
-async def new_event_in_trip(data: TripView) -> ...:
+async def new_event_in_trip_notify(data: TripView) -> ...:
     context_id = data.id
 
     for item in data.debts:
@@ -17,7 +17,7 @@ async def new_event_in_trip(data: TripView) -> ...:
         )
 
 
-async def new_debtor_in_event_added(
+async def new_debtor_in_event_added_notify(
     data: TripView,
     context_id: str,  # Need to set only if event is in trip
 ) -> ...:
