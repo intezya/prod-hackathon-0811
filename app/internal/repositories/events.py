@@ -14,8 +14,8 @@ async def get_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> Event | No
     event = await session.exec(statement)
     return event.first()
 
-async def create_event(*, session: AsyncSession, create_event: CreateEventRequest) -> Event:
-    model = Event(event_name=create_event.event_name, owner=create_event.owner, debts=create_event.debts)
+async def create_event(*, session: AsyncSession, create_event_req: CreateEventRequest) -> Event:
+    model = Event(event_name=create_event_req.event_name, owner=create_event_req.owner, debts=create_event_req.debts)
     session.add(model)
     await session.commit()
     await session.refresh(model)

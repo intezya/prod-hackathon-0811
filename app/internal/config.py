@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_TIME: int = 60 * 24 * 7  # 7 days
     API_V1_STR: str = "/api/v1"
+    FRONTEND_HOST: str = "localhost"
+    FRONTEND_PORT: str = "4000"
 
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_PORT: int = 5432
