@@ -32,7 +32,7 @@ class WebsocketService:
         await websocket.accept()
         self.__connections[user_unique_value] = websocket
 
-    async def disconnect(
+    def disconnect(
         self,
         websocket: Optional[WebSocket],
         user_name: Optional[str],
@@ -49,6 +49,15 @@ class WebsocketService:
             )
         else:
             raise ValueError("No user_name and link_id or websocket provided!")
+
+    def get(
+        self,
+        *,
+        user_name: Optional[str],
+        id_from_link: Optional[str],
+    ) -> WebSocket | None:
+        user_unique_value = self.__hash(user_name, id_from_link)
+        return self.__connections.get(user_unique_value)
 
 
 # Global variable
