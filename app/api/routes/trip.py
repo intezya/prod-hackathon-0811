@@ -1,9 +1,8 @@
 from fastapi import APIRouter
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
-from app.internal.db.core import get_db
+from app.internal.db.core import SessionDep
 from app.internal.db.models import TripView
 from app.internal.services.trips import get_trip_view
 
@@ -19,7 +18,7 @@ async def new_trip(body: CreateTripRequest) -> CreateTripResponse: ...
 @router.get("", response_model=TripView)
 async def get_trip(
     body: GetTripRequest,
-    session: AsyncSession = get_db(),
+    session: SessionDep,
 ) -> TripView:
     result = await get_trip_view(session=session, get_trip=body)
     return result
