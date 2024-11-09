@@ -4,14 +4,16 @@ from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripR
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
 from app.internal.db.core import SessionDep
 from app.internal.db.models import TripView
-from app.internal.services.trips import get_trip_view
+from app.internal.services.trips import create_trip_view, get_trip_view
 
 
 router = APIRouter()
 
 
 @router.post("/new", response_model=CreateTripResponse)
-async def new_trip(body: CreateTripRequest) -> CreateTripResponse: ...
+async def new_trip(session: SessionDep, body: CreateTripRequest) -> CreateTripResponse:
+    result = await create_trip_view(session=session, create_trip_req=body)
+    return result
 
 
 # TODO: i think need to do like GetTripResponse
