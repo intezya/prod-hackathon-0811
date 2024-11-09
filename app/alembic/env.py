@@ -15,7 +15,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from app.internal.config import settings
-from app.internal.db.models import Event, Link, Trip  # noqa
+from app.internal.db.models import Event, Trip, Link  # noqa
+
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -23,6 +24,7 @@ from app.internal.db.models import Event, Link, Trip  # noqa
 # target_metadata = mymodel.Base.metadata
 
 target_metadata = SQLModel.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

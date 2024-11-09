@@ -20,11 +20,20 @@ async def get_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> Event | No
 async def create_event(
     *, session: AsyncSession, create_event_req: CreateEventRequest
 ) -> Event:
-    model = Event(
-        event_name=create_event_req.event_name,
-        owner=create_event_req.owner,
-        debts=create_event_req.debts,
-    )
+    if not create_event_req.debts:
+        model = Event(
+            event_name=create_event_req.event_name,
+            owner_name=create_event_req.owner.name,
+            owner_description=create_event_req.owner.description,
+            debts={},
+        )
+    else:
+        model = Event(
+            event_name=create_event_req.event_name,
+            owner_name=create_event_req.owner.name,
+            owner_description=create_event_req.owner.description,
+            debts=[item.model_dump() for item in create_event_req.debts],
+        )
     session.add(model)
     await session.commit()
     await session.refresh(model)
