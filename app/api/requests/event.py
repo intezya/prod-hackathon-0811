@@ -1,6 +1,6 @@
-from http.client import HTTPException
 from typing import List, Optional
 
+from fastapi import HTTPException
 from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 from starlette import status
@@ -13,11 +13,12 @@ class CreateEventRequest(SQLModel):
     owner: Owner
     debts: List[Debtor] = Field(nullable=False, min_length=2)
 
+    @field_validator("debts")  # noqa
     @classmethod
-    @field_validator("debts")
     def validate_debts(cls, value):
-        if len(value) != len(set(value)):
+        if len(value) != len(set([item.name for item in value])):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
+        return value
 
 
 class CreateTripEventRequest(SQLModel):
@@ -26,15 +27,12 @@ class CreateTripEventRequest(SQLModel):
     trip_id: str
     debts: List[Debtor] = Field(nullable=False, min_length=2)
 
+    @field_validator("debts")  # noqa
     @classmethod
-    @field_validator("debts")
     def validate_debts(cls, value):
-        if len(value) != len(set(value)):
+        if len(value) != len(set([item.name for item in value])):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
-
-
-class GetEventRequest(SQLModel):
-    event_id: str
+        return value
 
 
 class AddDebtorRequest(SQLModel):

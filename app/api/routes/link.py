@@ -15,6 +15,8 @@ async def join(
     body: JoinByLinkRequest,
 ) -> JoinByLinkResponse:
     result = await join_by_link(
-        session=session, link=body.link, user_name=body.user_name
+        session=session,
+        link=body.link,
+        user_name=body.user_name,
     )
     return result
