@@ -12,8 +12,10 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 async def get_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> Event | None:
     statement = select(Event).where(Event.id == id)
-    event = await session.exec(statement)
-    return event.first()
+    result = await session.exec(statement)
+    event = result.one_or_none()
+    if event is not None:
+        return event.model_copy()
 
 async def delete_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> None:
     statement = select(Event).where(Event.id == id)
@@ -41,7 +43,7 @@ async def create_event(
     session.add(model)
     await session.commit()
     await session.refresh(model)
-    return model
+    return model.model_copy()
 
 
 async def get_event_views_from_event_ids(
@@ -54,7 +56,11 @@ async def get_event_views_from_event_ids(
     event_views: List[EventView] = list()
     for event in events:
         event_view = EventView(
-            id=event.id, event_name=event.event_name, debts=event.debts
+            id=event.id,
+            event_name=event.event_name,
+            debts=event.debts,
+            owner_name=event.owner_name,
+            owner_description=event.owner_description,
         )
-        event_views.append(event_view)
+        event_views.append(event_view.model_copy())
     return event_views

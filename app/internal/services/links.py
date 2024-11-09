@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
 
 from app.api.requests.trip import GetTripRequest
@@ -14,6 +14,8 @@ async def join_by_link(
 ) -> JoinByLinkResponse:
     link = link.split("/")[-1]
     result = await get_link_by_value(session=session, value=link)
+    if user_name not in result.allowed_user_names:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     data = None
 
     if result is None:
@@ -35,6 +37,5 @@ async def join_by_link(
     return JoinByLinkResponse(
         context_type=result.type,
         context_id=str(result.id),
-        allowed_names=result.allowed_user_names,
         data=data,
     )

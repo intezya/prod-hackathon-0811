@@ -26,3 +26,10 @@ cd backend && poetry shell
 alembic upgrade head
 exit
 #+end_src
+
+
+string string1 string2
+{
+  "event_id": "bff8ced9-33d4-46b4-8a00-6992903ceaec",
+  "link": "http://localhost:4000/link/6ebb770557f1b6305cbf649403c23cd31d8029783dac82c33061fffd34bc87fb"
+}

@@ -32,8 +32,10 @@ async def create_link(
 
 async def get_link_by_id(*, session: AsyncSession, id: uuid.UUID) -> Link | None:
     statement = select(Link).where(Link.id == id)
-    link = await session.exec(statement)
-    return link.first()
+    result = await session.exec(statement)
+    link = result.one_or_none()
+    if link is not None:
+        return link.model_copy()
 
 
 async def update_allowed_users_link_by_id(
@@ -47,6 +49,5 @@ async def update_allowed_users_link_by_id(
     link = result.one()
     link.allowed_user_names.append(new_allowed_user)
     await session.commit()
-    await session.flush(link)
-    await session.close()
+    await session.refresh(link)
     return

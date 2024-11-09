@@ -56,6 +56,8 @@ class Link(SQLModel, table=True):
 class EventView(SQLModel):
     id: uuid.UUID
     event_name: str
+    owner_name: str
+    owner_description: Optional[str]
     debts: List[Debtor]
 
 

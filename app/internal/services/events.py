@@ -25,7 +25,13 @@ async def get_event_view(
     event = await get_event_by_id(session=session, id=event_id)
     if not event:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    event_view = EventView(id=event.id, event_name=event.event_name, debts=event.debts)
+    event_view = EventView(
+        id=event.id,
+        event_name=event.event_name,
+        debts=event.debts,
+        owner_name=event.owner_name,
+        owner_description=event.owner_description,
+    )
     return event_view
 
 

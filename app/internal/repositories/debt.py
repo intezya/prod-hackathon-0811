@@ -16,7 +16,7 @@ async def repay_event_debtor_by_context_id(
     debtor: Debtor,
 ) -> int:
     statement = select(Event).where(Event.id == context_id)
-    event = await session.execute(statement)
+    event = await session.exec(statement)
     new_value = -1
 
     for item in event.scalar().debts:
@@ -49,4 +49,4 @@ async def add_debtor_to_event_by_context_id(
     await session.commit()
     await session.refresh(event)
     link_context = await get_link_by_id(session=session, id=context_id)
-    return link_context.value
+    return link_context.model_copy().value
