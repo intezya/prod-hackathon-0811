@@ -1,5 +1,6 @@
 import hashlib
 import uuid
+from typing import List
 
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -13,9 +14,16 @@ async def get_link_by_value(*, session: AsyncSession, value: str) -> Link | None
     return link.first()
 
 
-async def create_link(*, session: AsyncSession, id: uuid.UUID, type: str) -> Link:
+async def create_link(
+    *, session: AsyncSession, id: uuid.UUID, type: str, allowed_names: List[str]
+) -> Link:
     value = hashlib.sha256(str(id).encode()).hexdigest()
-    model = Link(value=value, id=id, type=type)
+    model = Link(
+        value=value,
+        id=id,
+        type=type,
+        allowed_user_names=allowed_names,
+    )
     session.add(model)
     await session.commit()
     await session.refresh(model)
