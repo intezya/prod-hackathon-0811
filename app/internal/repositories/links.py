@@ -2,10 +2,9 @@ import hashlib
 import uuid
 from typing import List
 
+from app.internal.db.models import Link
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-
-from app.internal.db.models import Link
 
 
 async def get_link_by_value(*, session: AsyncSession, value: str) -> Link | None:
