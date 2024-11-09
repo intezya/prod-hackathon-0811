@@ -1,12 +1,9 @@
-from fastapi import APIRouter
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.api.requests.event import AddDebtorRequest, CreateEventRequest, GetEventRequest
+from app.api.requests.event import (AddDebtorRequest, CreateEventRequest,
+                                    GetEventRequest)
 from app.api.responses.event import AddDebtorResponse, CreateEventResponse
 from app.internal.db.core import get_db
 from app.internal.db.models import EventView
-from app.internal.services.events import create_event_view, get_event_view
-
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -25,7 +22,6 @@ async def new_event(
 async def add_debtor(body: AddDebtorRequest) -> AddDebtorResponse: ...
 
 
-# Headers: user_name
 # TODO: i think need to do like GetEventResponse
 @router.get("", response_model=EventView)
 async def get_event(
