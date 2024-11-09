@@ -1,8 +1,6 @@
 import uuid
 
-from fastapi import HTTPException, status
-from sqlmodel.ext.asyncio.session import AsyncSession
-
+from app.api.requests.debt import ForgiveDebtRequest
 from app.api.requests.event import AddDebtorRequest, CreateEventRequest
 from app.api.responses.event import AddDebtorResponse, CreateEventResponse
 from app.internal.config import settings
@@ -21,8 +19,8 @@ async def get_event_view(
     session: AsyncSession,
     event_id: str,
 ) -> EventView:
-    event_id = uuid.UUID(event_id)
-    event = await get_event_by_id(session=session, id=event_id)
+    event_id = str(uuid.UUID(event_id))
+    event = await get_event_by_id(session=session, id=uuid.UUID(event_id))
     if not event:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     event_view = EventView(id=event.id, event_name=event.event_name, debts=event.debts)
