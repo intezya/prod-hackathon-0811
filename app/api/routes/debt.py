@@ -15,7 +15,7 @@ async def repay(
     session: SessionDep,
 ) -> PayDebtResponse:
     result = await pay_debt(session=session, req=body)
-    return PayDebtResponse()
+    return result
 
 
 # Headers: user_name (must be owner of an event)

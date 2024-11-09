@@ -16,17 +16,25 @@ async def repay_event_debtor_by_context_id(
 ) -> int:
     statement = select(Event).where(Event.id == context_id)
     result = await session.exec(statement)
-    event = result.first()
-    if not event:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     new_value = -1
+    event = result.one()
+
+    if event is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
+
+    new_debts = []
+
     for item in event.debts:
-        if item.name == debtor.name:
-            new_value = item.value - debtor.value
-            item.value = new_value
-            break
+        if item["name"] == debtor.name:
+            new_value = item["value"] - debtor.value
+            new_debts.append({"name": item["name"], "value": new_value})
+        else:
+            new_debts.append(item)
+    event.debts = new_debts
+    session.add(event)
     await session.commit()
-    return int(new_value)
+    await session.refresh(event)
+    return new_value
 
 
 async def add_debtor_to_event_by_context_id(
@@ -49,6 +57,4 @@ async def add_debtor_to_event_by_context_id(
     await session.commit()
     await session.refresh(event)
     link_context = await get_link_by_id(session=session, id=context_id)
-    if not link_context:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return link_context.value
+    return link_context.model_copy().value

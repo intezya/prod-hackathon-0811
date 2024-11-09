@@ -18,6 +18,10 @@ class CreateEventRequest(SQLModel):
     def validate_debts(cls, value):
         if len(value) != len(set([item.name for item in value])):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
+
+        for item in [item.value for item in value]:
+            if item <= 0:
+                raise HTTPException(status.HTTP_400_BAD_REQUEST)
         return value
 
 
@@ -32,6 +36,9 @@ class CreateTripEventRequest(SQLModel):
     def validate_debts(cls, value):
         if len(value) != len(set([item.name for item in value])):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
+        for item in [item.value for item in value]:
+            if item <= 0:
+                raise HTTPException(status.HTTP_400_BAD_REQUEST)
         return value
 
 
@@ -39,5 +46,5 @@ class AddDebtorRequest(SQLModel):
     # TODO: add unique debtor_name validation in repository/service layer
     event_id: str
     debtor_name: str
-    debtor_value: float
+    debtor_value: float = Field(gt=0)
     context_id: Optional[str]

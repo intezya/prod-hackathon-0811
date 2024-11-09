@@ -6,12 +6,12 @@ from app.api.responses.event import AddDebtorResponse, CreateEventResponse
 from app.internal.config import settings
 from app.internal.db.models import Debtor, EventView
 from app.internal.repositories.debt import add_debtor_to_event_by_context_id
-from app.internal.repositories.events import (create_event, delete_event_by_id,
-                                              get_event_by_id)
-from app.internal.repositories.links import (create_link,
-                                             update_allowed_users_link_by_id)
-from fastapi import HTTPException, status
-from sqlmodel.ext.asyncio.session import AsyncSession
+from app.internal.repositories.events import (
+    create_event,
+    delete_event_by_id,
+    get_event_by_id,
+)
+from app.internal.repositories.links import create_link, update_allowed_users_link_by_id
 
 
 async def get_event_view(
@@ -23,7 +23,13 @@ async def get_event_view(
     event = await get_event_by_id(session=session, id=uuid.UUID(event_id))
     if not event:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    event_view = EventView(id=event.id, event_name=event.event_name, debts=event.debts)
+    event_view = EventView(
+        id=event.id,
+        event_name=event.event_name,
+        debts=event.debts,
+        owner_name=event.owner_name,
+        owner_description=event.owner_description,
+    )
     return event_view
 
 
@@ -67,6 +73,7 @@ async def add_debtor_to_event(
     return AddDebtorResponse(
         link=f"http://{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}/link/{link_value}"
     )
+
 
 async def delete_event(session: AsyncSession, req: ForgiveDebtRequest) -> None:
     event_id = uuid.UUID(req.event_id)
