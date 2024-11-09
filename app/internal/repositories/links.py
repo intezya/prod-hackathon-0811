@@ -37,7 +37,10 @@ async def get_link_by_id(*, session: AsyncSession, id: uuid.UUID) -> Link | None
 
 
 async def update_allowed_users_link_by_id(
-    *, session: AsyncSession, id: uuid.UUID, new_allowed_user: str
+    *,
+    session: AsyncSession,
+    id: uuid.UUID,
+    new_allowed_user: str,
 ):
     statement = select(Link).where(Link.id == id)
     link = await session.exec(statement)
