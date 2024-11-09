@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import HTTPException
 from pydantic import field_validator
 from sqlmodel import SQLModel
@@ -6,7 +8,7 @@ from starlette import status
 
 class CreateTripRequest(SQLModel):
     name: str
-    allowed_names: str
+    allowed_names: List[str]
 
     @classmethod
     @field_validator("allowed_names")
