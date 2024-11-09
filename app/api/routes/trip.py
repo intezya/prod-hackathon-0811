@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 
-from app.api.requests.trip import CreateTripRequest, DeleteTripRequest
+from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
+from app.internal.db.models import TripView
 
 
 router = APIRouter()
@@ -11,8 +12,9 @@ router = APIRouter()
 async def new_trip(body: CreateTripRequest) -> CreateTripResponse: ...
 
 
-@router.get("", response_model=...)
-async def get_trip(body: ...) -> ...: ...
+# TODO: i think need to do like GetTripResponse
+@router.get("", response_model=TripView)
+async def get_trip(body: GetTripRequest) -> TripView: ...
 
 
 @router.delete("", response_model=DeleteTripResponse)

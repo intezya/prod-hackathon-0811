@@ -9,3 +9,7 @@ class CreateTripRequest(SQLModel):
 class DeleteTripRequest(SQLModel):
     trip_id: str
     owner_name: str
+
+
+class GetTripRequest(SQLModel):
+    trip_id: str

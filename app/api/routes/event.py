@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 
-from app.api.requests.event import CreateEventRequest
+from app.api.requests.event import CreateEventRequest, GetEventRequest
 from app.api.responses.event import CreateEventResponse
+from app.internal.db.models import EventView
 
 
 router = APIRouter()
@@ -12,6 +13,7 @@ router = APIRouter()
 async def new_event(body: CreateEventRequest) -> CreateEventResponse:...
 
 
-@router.get("")
-async def get_event(body: ...) -> ...: ...
+# TODO: i think need to do like GetEventResponse
+@router.get("", response_model=EventView)
+async def get_event(body: GetEventRequest) -> EventView: ...
 

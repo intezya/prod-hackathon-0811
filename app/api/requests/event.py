@@ -16,3 +16,7 @@ class CreateTripEventRequest(SQLModel):
     owner: Owner
     trip_id: str
     debts: List[Debtor]
+
+
+class GetEventRequest(SQLModel):
+    event_id: str
