@@ -28,6 +28,8 @@ async def repay_event_debtor_by_context_id(
     for item in event.debts:
         if item["name"] == debtor.name:
             new_value = item["value"] - debtor.value
+            if new_value < 0:
+                raise HTTPException(status.HTTP_400_BAD_REQUEST)
             new_debts.append({"name": item["name"], "value": new_value})
         else:
             new_debts.append(item)
