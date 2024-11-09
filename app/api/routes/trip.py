@@ -1,5 +1,6 @@
-from app.api.requests.trip import (CreateTripRequest, DeleteTripRequest,
-                                   GetTripRequest)
+from fastapi import APIRouter
+
+from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
 from app.internal.db.core import SessionDep
 from app.internal.db.models import TripView
