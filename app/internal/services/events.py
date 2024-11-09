@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
 
-from app.api.requests.debt import ForgiveDebtRequest
+from app.api.requests.debt import DeleteDebtRequest
 from app.api.requests.event import AddDebtorRequest, CreateEventRequest
 from app.api.responses.event import AddDebtorResponse, CreateEventResponse
 from app.internal.config import settings
@@ -79,6 +79,6 @@ async def add_debtor_to_event(
     )
 
 
-async def delete_event(session: AsyncSession, req: ForgiveDebtRequest) -> None:
+async def delete_event(session: AsyncSession, req: DeleteDebtRequest) -> None:
     event_id = uuid.UUID(req.event_id)
     await delete_event_by_id(session=session, id=event_id)

@@ -7,6 +7,6 @@ class PayDebtRequest(SQLModel):
     pay_value: float = Field(gt=0)
 
 
-class ForgiveDebtRequest(SQLModel):
+class DeleteDebtRequest(SQLModel):
     event_id: str
     debtor_name: str
