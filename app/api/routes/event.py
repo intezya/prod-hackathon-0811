@@ -1,9 +1,8 @@
 from fastapi import APIRouter
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.requests.event import AddDebtorRequest, CreateEventRequest, GetEventRequest
 from app.api.responses.event import AddDebtorResponse, CreateEventResponse
-from app.internal.db.core import get_db
+from app.internal.db.core import SessionDep
 from app.internal.db.models import EventView
 from app.internal.services.events import (
     add_debtor_to_event,
@@ -19,7 +18,7 @@ router = APIRouter()
 # In body we contain is_from_trip and trip_id
 async def new_event(
     body: CreateEventRequest,
-    session: AsyncSession = get_db(),
+    session: SessionDep,
 ) -> CreateEventResponse:
     result = await create_event_view(session=session, create_event_req=body)
     return result
@@ -27,7 +26,8 @@ async def new_event(
 
 @router.post("/add_debtor", response_model=AddDebtorResponse)
 async def add_debtor(
-    body: AddDebtorRequest, session: AsyncSession = get_db()
+    body: AddDebtorRequest,
+    session: SessionDep,
 ) -> AddDebtorResponse:
     await add_debtor_to_event(session=session, req=body)
     return AddDebtorResponse()
@@ -37,7 +37,7 @@ async def add_debtor(
 @router.get("", response_model=EventView)
 async def get_event(
     body: GetEventRequest,
-    session: AsyncSession = get_db(),
+    session: SessionDep,
 ) -> EventView:
     result = await get_event_view(session=session, get_event=body)
     return result
