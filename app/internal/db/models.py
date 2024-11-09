@@ -41,3 +41,15 @@ class Link(SQLModel, table=True):
         if v not in ["event", "trip"]:
             raise ValueError("type must be 'event' or 'trip'")
         return v
+
+
+class EventView(SQLModel):
+    id: uuid.UUID
+    event_name: str
+    debts: List[Debtor, ...]
+
+
+class TripView(SQLModel):
+    id: uuid.UUID
+    trip_name: str
+    event_ids: List[uuid.UUID]
