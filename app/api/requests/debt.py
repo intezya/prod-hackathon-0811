@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel
 
 
-class PayDebt(SQLModel):
+class PayDebtRequest(SQLModel):
     trip_id: str
     event_id: str
     debtor_name: str

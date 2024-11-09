@@ -1,12 +1,11 @@
 from fastapi import APIRouter
 
+from app.api.requests.debt import PayDebt, PayDebtRequest
+from app.api.responses.debt import PayDebtResponse
+
 
 router = APIRouter()
 
 
-@router.post("/new")
-async def new_debt(body: ...) -> ...: ...
-
-
-@router.patch("/update")
-async def repay(body: ...) -> ...: ...
+@router.patch("/update", response_model=PayDebtResponse)
+async def repay(body: PayDebtRequest) -> PayDebtResponse: ...
