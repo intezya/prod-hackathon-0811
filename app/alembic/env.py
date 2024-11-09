@@ -1,10 +1,9 @@
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
-
-from alembic import context
 from sqlmodel import SQLModel
 
+from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -16,7 +15,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from app.internal.config import settings
-from app.internal.db.models import Event, Trip, Bill, Link  # noqa
+from app.internal.db.models import Event, Link, Trip  # noqa
 
 # add your model's MetaData object here
 # for 'autogenerate' support
