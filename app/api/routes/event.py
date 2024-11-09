@@ -15,6 +15,7 @@ from app.internal.db.models import EventView
 from app.internal.services.events import (
     add_debtor_to_event,
     create_event_view,
+    get_event_names_by_link,
     get_event_view,
 )
 
@@ -56,5 +57,5 @@ async def get_event_names(
     session: SessionDep,
     body: GetEventNamesRequest,
 ) -> GetEventNamesResponse:
-    result = await get_event_names(session=session, req=body)
+    result = await get_event_names_by_link(session=session, req=body)
     return result

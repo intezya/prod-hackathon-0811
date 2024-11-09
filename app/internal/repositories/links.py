@@ -2,15 +2,18 @@ import hashlib
 import uuid
 from typing import List
 
-from app.internal.db.models import Link
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.internal.db.models import Link
 
 
 async def get_link_by_value(*, session: AsyncSession, value: str) -> Link | None:
     statement = select(Link).where(Link.value == value)
-    link = await session.exec(statement)
-    return link.first()
+    result = await session.exec(statement)
+    link = result.one_or_none()
+    if link is not None:
+        return link.model_copy()
 
 
 async def create_link(

@@ -24,7 +24,11 @@ from app.internal.repositories.events import (
     get_event_by_id,
     get_event_names_by_event_id,
 )
-from app.internal.repositories.links import create_link, update_allowed_users_link_by_id
+from app.internal.repositories.links import (
+    create_link,
+    get_link_by_value,
+    update_allowed_users_link_by_id,
+)
 
 
 async def get_event_view(
@@ -93,10 +97,17 @@ async def delete_event(session: AsyncSession, req: DeleteDebtRequest) -> None:
     await delete_event_by_id(session=session, id=event_id)
 
 
-async def get_event_names(
+async def get_event_names_by_link(
     session: AsyncSession, req: GetEventNamesRequest
 ) -> GetEventNamesResponse:
+    link_value = req.link.split("/")[-1]
+    link = await get_link_by_value(session=session, value=link_value)
+
+    if link is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
     result = await get_event_names_by_event_id(
-        session=session, event_id=uuid.UUID(req.event_id)
+        session=session,
+        event_id=link.id,
     )
     return result

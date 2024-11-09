@@ -51,4 +51,4 @@ class AddDebtorRequest(SQLModel):
 
 
 class GetEventNamesRequest(SQLModel):
-    event_id: str
+    link: str
