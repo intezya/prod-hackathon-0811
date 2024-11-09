@@ -3,9 +3,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from app.api.requests.event import GetEventRequest
+from app.api.requests.trip import GetTripRequest
 from app.api.responses.link import JoinByLinkResponse
 from app.internal.repositories.links import get_link_by_value
 from app.internal.services.events import get_event_view
+from app.internal.services.trips import get_trip_view
 
 
 async def join_by_link(
@@ -19,9 +21,9 @@ async def join_by_link(
             session=session, get_event=GetEventRequest(event_id=result.id)
         )
     elif result.type == "trip":
-        # TODO: add trip view
-        # data = await get_trip_view(session=session, get_trip=GetTripRequest(trip_id=result.id))
-        ...
+        data = await get_trip_view(
+            session=session, get_trip=GetTripRequest(trip_id=result.id)
+        )
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
