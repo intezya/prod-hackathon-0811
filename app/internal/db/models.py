@@ -4,6 +4,7 @@ from typing import List, Optional
 from pydantic import field_validator
 from sqlalchemy import Column, String, UUID
 from sqlalchemy.dialects.postgresql import ARRAY, JSON
+from sqlalchemy.ext.mutable import MutableList
 from sqlmodel import Field, SQLModel
 
 
@@ -22,7 +23,9 @@ class Event(SQLModel, table=True):
     owner_name: str
     owner_description: Optional[str]
     event_name: str
-    debts: List[Debtor] = Field(default_factory=None, sa_column=Column(ARRAY(JSON)))
+    debts: List[Debtor] = Field(
+        default_factory=None, sa_column=Column(MutableList.as_mutable(ARRAY(JSON)))
+    )
     trip_id: uuid.UUID = Field(nullable=True, default=None)
 
 
@@ -30,7 +33,7 @@ class Trip(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     trip_name: str
     event_ids: List[uuid.UUID] = Field(
-        default_factory=None, sa_column=Column(ARRAY(UUID))
+        default_factory=None, sa_column=Column(MutableList.as_mutable(ARRAY(UUID)))
     )
 
 

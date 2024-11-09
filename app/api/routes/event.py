@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.requests.event import AddDebtorRequest, CreateEventRequest, GetEventRequest
+from app.api.requests.event import AddDebtorRequest, CreateEventRequest
 from app.api.responses.event import AddDebtorResponse, CreateEventResponse
 from app.internal.db.core import SessionDep
 from app.internal.db.models import EventView
@@ -34,10 +34,10 @@ async def add_debtor(
 
 
 # TODO: i think need to do like GetEventResponse
-@router.get("", response_model=EventView)
+@router.get("/{event_id}", response_model=EventView)
 async def get_event(
-    body: GetEventRequest,
+    event_id: str,
     session: SessionDep,
 ) -> EventView:
-    result = await get_event_view(session=session, get_event=body)
+    result = await get_event_view(session=session, event_id=event_id)
     return result

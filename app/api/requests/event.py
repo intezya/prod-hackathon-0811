@@ -35,10 +35,6 @@ class CreateTripEventRequest(SQLModel):
         return value
 
 
-class GetEventRequest(SQLModel):
-    event_id: str
-
-
 class AddDebtorRequest(SQLModel):
     # TODO: add unique debtor_name validation in repository/service layer
     event_id: str

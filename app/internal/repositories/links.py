@@ -43,7 +43,10 @@ async def update_allowed_users_link_by_id(
     new_allowed_user: str,
 ):
     statement = select(Link).where(Link.id == id)
-    link = await session.exec(statement)
-    link.scalar().allowed_user_names.append(new_allowed_user)
+    result = await session.exec(statement)
+    link = result.one()
+    link.allowed_user_names.append(new_allowed_user)
     await session.commit()
+    await session.flush(link)
+    await session.close()
     return

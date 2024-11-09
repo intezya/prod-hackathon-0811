@@ -38,9 +38,9 @@ services:
       db:
         condition: service_healthy
     build:
-      context: ./backend
+      context: .
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/health-check" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health-check" ]
       interval: 10s
       retries: 5
       timeout: 10s
