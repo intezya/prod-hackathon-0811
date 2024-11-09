@@ -8,3 +8,6 @@ class CreateEventResponse(SQLModel):
 
 class CreateTripEventResponse(SQLModel):
     event_id: str
+
+
+class AddDebtorResponse(SQLModel): ...

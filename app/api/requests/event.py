@@ -1,7 +1,8 @@
-from typing import List, Optional
+from typing import List
+
+from sqlmodel import SQLModel
 
 from app.internal.db.models import Debtor, Owner
-from sqlmodel import SQLModel
 
 
 class CreateEventRequest(SQLModel):
@@ -19,3 +20,9 @@ class CreateTripEventRequest(SQLModel):
 
 class GetEventRequest(SQLModel):
     event_id: str
+
+
+class AddDebtorRequest(SQLModel):
+    event_id: str
+    debtor_name: str
+    debtor_value: float
