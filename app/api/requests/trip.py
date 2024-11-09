@@ -15,6 +15,7 @@ class CreateTripRequest(SQLModel):
     def validate_debts(cls, value):
         if len(value) != len(set(value)):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
+        return value
 
 
 class DeleteTripRequest(SQLModel):

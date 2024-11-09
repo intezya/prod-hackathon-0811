@@ -16,9 +16,10 @@ class CreateEventRequest(SQLModel):
     @field_validator("debts")  # noqa
     @classmethod
     def validate_debts(cls, value):
-        print(123)
+        print(len(value), len(set([item.name for item in value])))
         if len(value) != len(set([item.name for item in value])):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
+        return value
 
 
 class CreateTripEventRequest(SQLModel):
@@ -32,6 +33,7 @@ class CreateTripEventRequest(SQLModel):
     def validate_debts(cls, value):
         if len(value) != len(set([item.name for item in value])):
             raise HTTPException(status.HTTP_400_BAD_REQUEST)
+        return value
 
 
 class GetEventRequest(SQLModel):
