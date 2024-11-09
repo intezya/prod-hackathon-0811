@@ -1,19 +1,18 @@
 import uuid
 
-from fastapi import HTTPException, status
-from sqlmodel.ext.asyncio.session import AsyncSession
-
-from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
+from app.api.requests.event import CreateTripEventRequest
+from app.api.requests.trip import (CreateTripRequest, DeleteTripRequest,
+                                   GetTripRequest)
+from app.api.responses.event import CreateTripEventResponse
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
 from app.internal.config import settings
 from app.internal.db.models import TripView
 from app.internal.repositories.events import get_event_views_from_event_ids
 from app.internal.repositories.links import create_link
-from app.internal.repositories.trips import (
-    create_trip,
-    delete_trip_by_id,
-    get_trip_by_id,
-)
+from app.internal.repositories.trips import (create_trip, create_trip_event,
+                                             delete_trip_by_id, get_trip_by_id)
+from fastapi import HTTPException, status
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 
 async def get_trip_view(*, session: AsyncSession, get_trip: GetTripRequest) -> TripView:
@@ -43,6 +42,11 @@ async def create_trip_view(
         link=f"http://{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}/link/{link.value}",
     )
     return trip_resp
+
+async def create_trip_event_view(*, session: AsyncSession, create_trip_event_req: CreateTripEventRequest) -> CreateTripEventResponse:
+    trip_event = await create_trip_event(session=session, create_trip_event=create_trip_event_req)
+    trip_event_resp = CreateTripEventResponse(event_id=str(trip_event.id))
+    return trip_event_resp
 
 
 async def delete_trip(
