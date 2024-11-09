@@ -5,8 +5,16 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
 
 from app.api.requests.debt import DeleteDebtRequest
-from app.api.requests.event import AddDebtorRequest, CreateEventRequest
-from app.api.responses.event import AddDebtorResponse, CreateEventResponse
+from app.api.requests.event import (
+    AddDebtorRequest,
+    CreateEventRequest,
+    GetEventNamesRequest,
+)
+from app.api.responses.event import (
+    AddDebtorResponse,
+    CreateEventResponse,
+    GetEventNamesResponse,
+)
 from app.internal.config import settings
 from app.internal.db.models import Debtor, EventView
 from app.internal.repositories.debt import add_debtor_to_event_by_context_id
@@ -14,6 +22,7 @@ from app.internal.repositories.events import (
     create_event,
     delete_event_by_id,
     get_event_by_id,
+    get_event_names_by_event_id,
 )
 from app.internal.repositories.links import create_link, update_allowed_users_link_by_id
 
@@ -82,3 +91,12 @@ async def add_debtor_to_event(
 async def delete_event(session: AsyncSession, req: DeleteDebtRequest) -> None:
     event_id = uuid.UUID(req.event_id)
     await delete_event_by_id(session=session, id=event_id)
+
+
+async def get_event_names(
+    session: AsyncSession, req: GetEventNamesRequest
+) -> GetEventNamesResponse:
+    result = await get_event_names_by_event_id(
+        session=session, event_id=uuid.UUID(req.event_id)
+    )
+    return result

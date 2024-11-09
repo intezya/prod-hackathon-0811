@@ -48,3 +48,7 @@ class AddDebtorRequest(SQLModel):
     debtor_name: str
     debtor_value: float = Field(gt=0)
     context_id: Optional[str]
+
+
+class GetEventNamesRequest(SQLModel):
+    event_id: str

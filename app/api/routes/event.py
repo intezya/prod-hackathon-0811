@@ -1,7 +1,15 @@
 from fastapi import APIRouter
 
-from app.api.requests.event import AddDebtorRequest, CreateEventRequest
-from app.api.responses.event import AddDebtorResponse, CreateEventResponse
+from app.api.requests.event import (
+    AddDebtorRequest,
+    CreateEventRequest,
+    GetEventNamesRequest,
+)
+from app.api.responses.event import (
+    AddDebtorResponse,
+    CreateEventResponse,
+    GetEventNamesResponse,
+)
 from app.internal.db.core import SessionDep
 from app.internal.db.models import EventView
 from app.internal.services.events import (
@@ -40,4 +48,13 @@ async def get_event(
     session: SessionDep,
 ) -> EventView:
     result = await get_event_view(session=session, event_id=event_id)
+    return result
+
+
+@router.get("/names", response_model=GetEventNamesResponse)
+async def get_event_names(
+    session: SessionDep,
+    body: GetEventNamesRequest,
+) -> GetEventNamesResponse:
+    result = await get_event_names(session=session, req=body)
     return result

@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlmodel import SQLModel
 
 
@@ -12,3 +14,7 @@ class CreateTripEventResponse(SQLModel):
 
 class AddDebtorResponse(SQLModel):
     link: str
+
+
+class GetEventNamesResponse(SQLModel):
+    names: List[str]

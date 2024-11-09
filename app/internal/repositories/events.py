@@ -4,10 +4,11 @@
 import uuid
 from typing import List
 
-from app.api.requests.event import CreateEventRequest
-from app.internal.db.models import Event, EventView
 from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.api.requests.event import CreateEventRequest
+from app.internal.db.models import Event, EventView
 
 
 async def get_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> Event | None:
@@ -16,6 +17,7 @@ async def get_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> Event | No
     event = result.one_or_none()
     if event is not None:
         return event.model_copy()
+
 
 async def delete_event_by_id(*, session: AsyncSession, id: uuid.UUID) -> None:
     statement = select(Event).where(Event.id == id)
@@ -64,3 +66,15 @@ async def get_event_views_from_event_ids(
         )
         event_views.append(event_view.model_copy())
     return event_views
+
+
+async def get_event_names_by_event_id(session: AsyncSession, event_id: uuid.UUID):
+    statement = select(Event).where(Event.id == event_id)
+    result = await session.exec(statement)
+    event = result.one()
+    total: List[str] = []
+
+    for item in event.debts:
+        total.append(item["name"])
+
+    return total
