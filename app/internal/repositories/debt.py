@@ -1,12 +1,11 @@
 import uuid
 
+from app.internal.db.models import Debtor, Event
+from app.internal.repositories.links import get_link_by_id
 from fastapi import HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
-
-from app.internal.db.models import Debtor, Event
-from app.internal.repositories.links import get_link_by_id
 
 
 async def repay_event_debtor_by_context_id(
@@ -16,17 +15,18 @@ async def repay_event_debtor_by_context_id(
     debtor: Debtor,
 ) -> int:
     statement = select(Event).where(Event.id == context_id)
-    event = await session.execute(statement)
+    result = await session.exec(statement)
+    event = result.first()
+    if not event:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     new_value = -1
-
-    for item in event.scalar().debts:
+    for item in event.debts:
         if item.name == debtor.name:
             new_value = item.value - debtor.value
             item.value = new_value
             break
-
     await session.commit()
-    return new_value
+    return int(new_value)
 
 
 async def add_debtor_to_event_by_context_id(
@@ -41,12 +41,14 @@ async def add_debtor_to_event_by_context_id(
     event = result.one()
     if not event:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
-    if debtor.name in [item["name"] for item in event.debts]:
+    if debtor.name in [item["name"] for item in event.debts]:  # type: ignore
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
-    event.debts.append(debtor.model_dump())
+    event.debts.append(debtor.model_dump())  # type: ignore
     session.add(event)
     await session.commit()
     await session.refresh(event)
     link_context = await get_link_by_id(session=session, id=context_id)
+    if not link_context:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return link_context.value

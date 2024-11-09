@@ -1,12 +1,11 @@
-from fastapi import HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
-
 from app.api.requests.trip import GetTripRequest
 from app.api.responses.link import JoinByLinkResponse
 from app.internal.repositories.links import get_link_by_value
 from app.internal.services.events import get_event_view
 from app.internal.services.trips import get_trip_view
+from fastapi import HTTPException
+from sqlmodel.ext.asyncio.session import AsyncSession
+from starlette import status
 
 
 async def join_by_link(
@@ -27,7 +26,7 @@ async def join_by_link(
     elif result.type == "trip":
         data = await get_trip_view(
             session=session,
-            get_trip=GetTripRequest(trip_id=result.id),
+            get_trip=GetTripRequest(trip_id=str(result.id)),
         )
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)

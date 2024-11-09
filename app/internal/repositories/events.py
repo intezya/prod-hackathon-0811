@@ -29,14 +29,14 @@ async def create_event(
             event_name=create_event_req.event_name,
             owner_name=create_event_req.owner.name,
             owner_description=create_event_req.owner.description,
-            debts={},
+            debts={},  # type: ignore
         )
     else:
         model = Event(
             event_name=create_event_req.event_name,
             owner_name=create_event_req.owner.name,
             owner_description=create_event_req.owner.description,
-            debts=[item.model_dump() for item in create_event_req.debts],
+            debts=[item.model_dump() for item in create_event_req.debts],  # type: ignore
         )
     session.add(model)
     await session.commit()

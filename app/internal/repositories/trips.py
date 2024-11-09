@@ -30,7 +30,12 @@ async def create_trip(*, session: AsyncSession, trip_create: CreateTripRequest) 
      return model
 
 async def create_trip_event(*, session: AsyncSession, create_trip_event: CreateTripEventRequest) -> Event:
-     model = Event(event_name=create_trip_event.event_name, owner=create_trip_event.owner, debts=create_trip_event.debts)
+     model = Event(
+          event_name=create_trip_event.event_name,
+          owner_name=create_trip_event.owner.name,
+          owner_description=create_trip_event.owner.description,
+          debts=create_trip_event.debts,
+     )
      session.add(model)
      await session.commit()
      await session.refresh(model)

@@ -2,10 +2,9 @@ import hashlib
 import uuid
 from typing import List
 
+from app.internal.db.models import Link
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-
-from app.internal.db.models import Link
 
 
 async def get_link_by_value(*, session: AsyncSession, value: str) -> Link | None:
@@ -47,6 +46,6 @@ async def update_allowed_users_link_by_id(
     link = result.one()
     link.allowed_user_names.append(new_allowed_user)
     await session.commit()
-    await session.flush(link)
+    await session.flush(link)  # type: ignore
     await session.close()
     return
