@@ -23,9 +23,9 @@ class WebsocketService:
 
     async def connect(
         self,
-        websocket: Optional[WebSocket],
-        user_name: Optional[str],
-        id_from_link: Optional[str],
+        websocket: WebSocket,
+        user_name: str,
+        id_from_link: str,
     ):
         user_unique_value = self.__hash(user_name, id_from_link)
 
@@ -34,13 +34,13 @@ class WebsocketService:
 
     async def disconnect(
         self,
-        websocket: WebSocket,
-        user_name: str,
-        link_id: str,
+        websocket: Optional[WebSocket],
+        user_name: Optional[str],
+        id_from_link: Optional[str],
     ):
-        user_unique_value = self.__hash(user_name, link_id)
+        user_unique_value = self.__hash(user_name, id_from_link)
 
-        if user_name and link_id:
+        if user_name and id_from_link:
             self.__connections.pop(user_unique_value)
         elif websocket:
             pop_from_dict_by_value(
