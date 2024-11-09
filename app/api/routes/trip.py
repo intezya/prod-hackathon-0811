@@ -1,17 +1,17 @@
-from fastapi import APIRouter
-
-from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
+from app.api.requests.trip import (CreateTripRequest, DeleteTripRequest,
+                                   GetTripRequest)
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
 from app.internal.db.core import SessionDep
 from app.internal.db.models import TripView
 from app.internal.services.trips import get_trip_view
-
+from fastapi import APIRouter
 
 router = APIRouter()
 
 
 @router.post("/new", response_model=CreateTripResponse)
-async def new_trip(body: CreateTripRequest) -> CreateTripResponse: ...
+async def new_trip(body: CreateTripRequest, session: SessionDep) -> CreateTripResponse:
+    pass
 
 
 # TODO: i think need to do like GetTripResponse
