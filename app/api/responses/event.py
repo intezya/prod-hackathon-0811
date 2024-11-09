@@ -10,4 +10,5 @@ class CreateTripEventResponse(SQLModel):
     event_id: str
 
 
-class AddDebtorResponse(SQLModel): ...
+class AddDebtorResponse(SQLModel):
+    link: str

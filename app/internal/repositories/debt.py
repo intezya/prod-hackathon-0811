@@ -35,14 +35,15 @@ async def add_debtor_to_event_by_context_id(
     event_id: uuid.UUID,
     debtor: Debtor,
     context_id: uuid.UUID,
-) -> None:
+) -> str:
     statement = select(Event).where(Event.id == event_id)
     event = await session.execute(statement)
 
-    if debtor in event.scalar().debts:
+    if debtor.name in [item.name for item in event.scalar().debts]:
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
     event.scalar().debts.append(debtor)
 
-    link_context = get_link_by_id(session=session, id=context_id)
+    link_context = await get_link_by_id(session=session, id=context_id)
     await session.commit()
+    return link_context.value

@@ -29,8 +29,8 @@ async def add_debtor(
     body: AddDebtorRequest,
     session: SessionDep,
 ) -> AddDebtorResponse:
-    await add_debtor_to_event(session=session, req=body)
-    return AddDebtorResponse()
+    result = await add_debtor_to_event(session=session, req=body)
+    return result
 
 
 # TODO: i think need to do like GetEventResponse
