@@ -6,13 +6,13 @@ from app.internal.db.models import Debtor
 
 
 class CreateEvent(SQLModel):
-    name: str
+    event_name: str
     owner_name: str
     debts: List[Debtor]
 
 
 class CreateTripEvent(SQLModel):
-    name: str
+    event_name: str
     owner_name: str
     trip_id: str
     debts: List[Debtor]
