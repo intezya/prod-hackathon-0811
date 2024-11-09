@@ -1,7 +1,9 @@
 import uuid
 
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+from starlette import status
 
 from app.internal.db.models import Debtor, Event
 from app.internal.repositories.links import get_link_by_id
@@ -36,6 +38,10 @@ async def add_debtor_to_event_by_context_id(
 ) -> None:
     statement = select(Event).where(Event.id == event_id)
     event = await session.execute(statement)
+
+    if debtor in event.scalar().debts:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST)
+
     event.scalar().debts.append(debtor)
 
     link_context = get_link_by_id(session=session, id=context_id)
