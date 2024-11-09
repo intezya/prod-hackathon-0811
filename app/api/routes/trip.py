@@ -15,11 +15,12 @@ async def new_trip(body: CreateTripRequest, session: SessionDep) -> CreateTripRe
 
 
 # TODO: i think need to do like GetTripResponse
-@router.get("", response_model=TripView)
+@router.get("/{trip_id}", response_model=TripView)
 async def get_trip(
-    body: GetTripRequest,
     session: SessionDep,
+    trip_id: str,
 ) -> TripView:
+    body = GetTripRequest(trip_id=trip_id)
     result = await get_trip_view(session=session, get_trip=body)
     return result
 
