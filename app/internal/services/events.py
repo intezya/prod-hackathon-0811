@@ -32,7 +32,12 @@ async def create_event_view(
 ) -> CreateEventResponse:
     # create event -> link by id
     event = await create_event(session=session, create_event_req=create_event_req)
-    link = await create_link(session=session, id=event.id, type="event")
+    link = await create_link(
+        session=session,
+        id=event.id,
+        type="event",
+        allowed_names=[i.name for i in create_event_req.debts],
+    )
     event_resp = CreateEventResponse(
         event_id=str(event.id),
         link=f"http://{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}/link/{link.value}",  # noqa
@@ -41,14 +46,15 @@ async def create_event_view(
 
 
 async def add_debtor_to_event(session: AsyncSession, req: AddDebtorRequest):
-    await update_allowed_users_link_by_id(
-        session=session,
-        id=uuid.UUID(req.context_id),
-        new_allowed_user=req.debtor,
-    )
     await add_debtor_to_event_by_context_id(
         session=session,
         event_id=uuid.UUID(req.event_id),
         context_id=uuid.UUID(req.context_id),
         debtor=Debtor(name=req.debtor_name, value=req.debtor_value),
+    )
+
+    await update_allowed_users_link_by_id(
+        session=session,
+        id=uuid.UUID(req.context_id),
+        new_allowed_user=req.debtor,
     )

@@ -21,3 +21,4 @@ async def pay_debt(
         context_id=uuid.UUID(context_id),
         debtor=req.debtor,
     )
+    return new_value
