@@ -6,7 +6,7 @@
 import uuid
 
 from app.api.requests.event import CreateTripEventRequest
-from app.api.requests.trip import CreateTrip
+from app.api.requests.trip import CreateTripRequest
 from app.internal.db.models import Event, Trip
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -22,7 +22,7 @@ async def delete_trip_by_id(*, session: AsyncSession, id: uuid.UUID) -> None:
      trip = await session.exec(statement)
      await session.delete(trip.first())
 
-async def create_trip(*, session: AsyncSession, trip_create: CreateTrip) -> Trip:
+async def create_trip(*, session: AsyncSession, trip_create: CreateTripRequest) -> Trip:
      model = Trip(trip_name=trip_create.name)
      session.add(model)
      await session.commit()
