@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sqlmodel import SQLModel
 
@@ -26,3 +26,4 @@ class AddDebtorRequest(SQLModel):
     event_id: str
     debtor_name: str
     debtor_value: float
+    context_id: Optional[str]
