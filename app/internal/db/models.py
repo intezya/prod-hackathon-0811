@@ -5,7 +5,6 @@ from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 
 
-
 class Debtor(SQLModel):
     name: str
     value: float
@@ -16,10 +15,11 @@ class Owner(SQLModel):
 
 
 class Event(SQLModel, table=True):
-    id: uuid.UUID = Field(primary_key=True, nullable=False)
+    id: uuid.UUID = Field(primary_key=True, default_factory=uuid.uuid4)
     owner: Owner
     event_name: str
     debts: List[Debtor, ...] = Field(default_factory=list)
+    trip_id: uuid.UUID = Field(nullable=True, default=None)
 
 
 class Trip(SQLModel, table=True):
