@@ -1,12 +1,17 @@
+from fastapi import APIRouter
+
 from app.api.requests.event import CreateTripEventRequest
-from app.api.requests.trip import (CreateTripRequest, DeleteTripRequest,
-                                   GetTripRequest)
+from app.api.requests.trip import CreateTripRequest, DeleteTripRequest, GetTripRequest
 from app.api.responses.event import CreateTripEventResponse
 from app.api.responses.trip import CreateTripResponse, DeleteTripResponse
 from app.internal.db.core import SessionDep
 from app.internal.db.models import TripView
-from app.internal.services.trips import create_trip_event_view, create_trip_view, get_trip_view,  
-from fastapi import APIRouter
+from app.internal.services.trips import (
+    create_trip_event_view,
+    create_trip_view,
+    get_trip_view,
+)
+
 
 router = APIRouter()
 
@@ -16,10 +21,11 @@ async def new_trip(session: SessionDep, body: CreateTripRequest) -> CreateTripRe
     result = await create_trip_view(session=session, create_trip_req=body)
     return result
 
+
 @router.post("/event/new", response_model=CreateTripEventResponse)
 async def new_trip_event(
-        session: SessionDep,
-        body: CreateTripEventRequest,
+    session: SessionDep,
+    body: CreateTripEventRequest,
 ) -> CreateTripEventResponse:
     result = await create_trip_event_view(session=session, create_trip_event_req=body)
     return result
