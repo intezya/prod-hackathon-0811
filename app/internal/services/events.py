@@ -32,7 +32,12 @@ async def create_event_view(
 ) -> CreateEventResponse:
     # create event -> link by id
     event = await create_event(session=session, create_event_req=create_event_req)
-    link = await create_link(session=session, id=event.id, type="event")
+    link = await create_link(
+        session=session,
+        id=event.id,
+        type="event",
+        allowed_names=[i.name for i in create_event_req.debts],
+    )
     event_resp = CreateEventResponse(
         event_id=str(event.id),
         link=f"http://{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}/link/{link.value}",  # noqa
