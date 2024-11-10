@@ -17,6 +17,7 @@ from app.internal.repositories.trips import (
     delete_trip_by_id,
     get_trip_by_id,
 )
+from app.internal.websocket_messages.event import new_event_in_trip_notify
 
 
 async def get_trip_view(*, session: AsyncSession, get_trip: GetTripRequest) -> TripView:
@@ -59,6 +60,13 @@ async def create_trip_event_view(
         session=session, create_trip_event=create_trip_event_req
     )
     trip_event_resp = CreateTripEventResponse(event_id=str(trip_event.id))
+
+    trip_context = await get_trip_view(
+        session=session,
+        get_trip=GetTripRequest(trip_id=str(trip_event.trip_id)),
+    )
+    await new_event_in_trip_notify(trip_context)
+
     return trip_event_resp
 
 

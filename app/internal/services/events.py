@@ -29,6 +29,7 @@ from app.internal.repositories.links import (
     get_link_by_value,
     update_allowed_users_link_by_id,
 )
+from app.internal.websocket_messages.event import new_debtor_in_event_added_notify
 
 
 async def get_event_view(
@@ -87,6 +88,10 @@ async def add_debtor_to_event(
         new_allowed_user=req.debtor_name,
     )
 
+    await new_debtor_in_event_added_notify(
+        data=await get_event_view(session=session, event_id=req.event_id),
+        context_id=req.event_id,
+    )
     return AddDebtorResponse(
         link=f"http://{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}/link/{link_value}"
     )

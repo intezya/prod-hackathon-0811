@@ -1,10 +1,12 @@
+from typing import Optional
+
 from app.internal.db.models import EventView
 from app.internal.services.websocket import main_websocket_service as ws_service
 
 
 async def debt_paid_out_notify(
     data: EventView,
-    context_id: str,  # Need to set only if event is in trip
+    context_id: Optional[str],  # Need to set only if event is in trip
 ) -> ...:
     """
     PLS SET CONTEXT_ID IF EVENT IS IN TRIP
