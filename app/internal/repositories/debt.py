@@ -17,7 +17,6 @@ async def repay_event_debtor_by_context_id(
 ) -> int:
     statement = select(Event).where(Event.id == context_id)
     result = await session.exec(statement)
-    new_value = -1
     event = result.one()
 
     if event is None:
@@ -30,9 +29,14 @@ async def repay_event_debtor_by_context_id(
             new_value = item["value"] - debtor.value
             if new_value < 0:
                 raise HTTPException(status.HTTP_400_BAD_REQUEST)
-            new_debts.append({"name": item["name"], "value": new_value})
+            if new_value > 0:
+                new_debts.append({"name": item["name"], "value": new_value})
+            else:
+                pass
+
         else:
-            new_debts.append(item)
+            if item["value"] > 0:
+                new_debts.append(item)
     event.debts = new_debts
     session.add(event)
     await session.commit()
