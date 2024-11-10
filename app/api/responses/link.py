@@ -1,5 +1,7 @@
+from fastapi import HTTPException
 from pydantic import field_validator
 from sqlmodel import SQLModel
+from starlette import status
 
 from app.internal.db.models import EventView, TripView
 
@@ -13,5 +15,8 @@ class JoinByLinkResponse(SQLModel):
     @field_validator("context_type")
     def validate_context_type(cls, v):
         if v not in ["event", "trip"]:
-            raise ValueError("context_type must be 'event' or 'trip'")
+            raise HTTPException(
+                status.HTTP_422_UNPROCESSABLE_ENTITY,
+                {"message": "context_type must be 'event' or 'trip'"},
+            )
         return v

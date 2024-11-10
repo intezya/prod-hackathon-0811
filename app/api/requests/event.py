@@ -17,11 +17,17 @@ class CreateEventRequest(SQLModel):
     @classmethod
     def validate_debts(cls, value):
         if len(value) != len(set([item.name for item in value])):
-            raise HTTPException(status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                detail={"message": "names must be unique"},
+            )
 
         for item in [item.value for item in value]:
             if item <= 0:
-                raise HTTPException(status.HTTP_400_BAD_REQUEST)
+                raise HTTPException(
+                    status.HTTP_400_BAD_REQUEST,
+                    detail={"message": "value must be greater than 0"},
+                )
         return value
 
 
@@ -35,10 +41,16 @@ class CreateTripEventRequest(SQLModel):
     @classmethod
     def validate_debts(cls, value):
         if len(value) != len(set([item.name for item in value])):
-            raise HTTPException(status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                detail={"message": "names must be unique"},
+            )
         for item in [item.value for item in value]:
             if item <= 0:
-                raise HTTPException(status.HTTP_400_BAD_REQUEST)
+                raise HTTPException(
+                    status.HTTP_400_BAD_REQUEST,
+                    detail={"message": "value must be greater than 0"},
+                )
         return value
 
 

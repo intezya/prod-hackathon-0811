@@ -55,9 +55,15 @@ async def add_debtor_to_event_by_context_id(
     result = await session.exec(statement)
     event = result.one()
     if not event:
-        raise HTTPException(status.HTTP_404_NOT_FOUND)
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND,
+            detail={"message": "event not found"},
+        )
     if debtor.name in [item["name"] for item in event.debts]:  # type: ignore
-        raise HTTPException(status.HTTP_400_BAD_REQUEST)
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            detail={"message": "debtor already exists"},
+        )
 
     event.debts.append(debtor.model_dump())  # type: ignore
     session.add(event)
@@ -77,7 +83,10 @@ async def delete_user_debt_from_event(
     result = await session.exec(statement)
     event = result.one()
     if not event:
-        raise HTTPException(status.HTTP_404_NOT_FOUND)
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND,
+            detail={"message": "event not found"},
+        )
     new_debts = []
     for item in event.debts:
         if item["name"] != debtor_name:

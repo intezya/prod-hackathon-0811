@@ -24,7 +24,10 @@ async def get_trip_view(*, session: AsyncSession, get_trip: GetTripRequest) -> T
     trip_id = uuid.UUID(get_trip.trip_id)
     trip = await get_trip_by_id(session=session, id=trip_id)
     if not trip:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"message": "trip not found"},
+        )
     event_views = await get_event_views_from_event_ids(
         session=session, event_ids=trip.event_ids
     )
@@ -77,8 +80,14 @@ async def delete_trip(
     trip_id = uuid.UUID(delete_trip_req.trip_id)
     trip = await get_trip_by_id(session=session, id=trip_id)
     if not trip:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"message": "trip not found"},
+        )
     if trip.event_ids:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"message": "trip has events"},
+        )
     await delete_trip_by_id(session=session, id=trip.id)
     return DeleteTripResponse()

@@ -14,7 +14,10 @@ class CreateTripRequest(SQLModel):
     @classmethod
     def validate_debts(cls, value):
         if len(value) != len(set(value)):
-            raise HTTPException(status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                detail={"message": "names must be unique"},
+            )
         return value
 
 

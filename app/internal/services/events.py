@@ -40,7 +40,10 @@ async def get_event_view(
     event_id = str(uuid.UUID(event_id))
     event = await get_event_by_id(session=session, id=uuid.UUID(event_id))
     if not event:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"message": "event not found"},
+        )
     event_view = EventView(
         id=event.id,
         event_name=event.event_name,
