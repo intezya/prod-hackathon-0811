@@ -1,22 +1,21 @@
-"""asdsadas
+"""ASd
 
-
-Revision ID: 9fa9ab23b1f4
+Revision ID: 7bd4a4be012f
 Revises: 
-Create Date: 2024-11-09 17:03:56.016762
+Create Date: 2024-11-10 12:15:25.678253
 
 """
 
 from typing import Sequence, Union
 
 import sqlalchemy as sa
-import sqlmodel.sql.sqltypes
+import sqlmodel
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
 
 # revision identifiers, used by Alembic.
-revision: str = "9fa9ab23b1f4"
+revision: str = "7bd4a4be012f"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -29,14 +28,12 @@ def upgrade() -> None:
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("owner_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column(
-            "owner_description",
-            sqlmodel.sql.sqltypes.AutoString(),
-            nullable=True,
+            "owner_description", sqlmodel.sql.sqltypes.AutoString(), nullable=True
         ),
         sa.Column("event_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column(
             "debts",
-            postgresql.ARRAY(postgresql.JSON(astext_type=sa.Text())),
+            postgresql.ARRAY(postgresql.JSON(none_as_null=True, astext_type=sa.Text())),
             nullable=True,
         ),
         sa.Column("trip_id", sa.Uuid(), nullable=True),
